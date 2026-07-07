@@ -19,7 +19,7 @@ Function    : {
     program: Statements | Lmbd | Rules
 }
 
-// Program
+// Program code
 
 function main(topModule: Module, args: SExpr[]): Lmbd
     content = topModule["main"]

@@ -15,7 +15,7 @@ AppNorm     : {body: LmbdNorm, arg: LmbdNorm}           // application
 LmbdNorm    : AbsNorm | AppNorm | SKI | Call | SExpr    // lambda expression
 SKI         : S | K | I                                 // SKI combinators
 
-// The algorithm
+// Program code
 
 function evaluate(expr: Lmbd): Lmbd
     return denormalize(skiToLmbd(evalSki(lmbdToSki(normalize(expr)))))

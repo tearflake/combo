@@ -1,0 +1,21 @@
+<imp> := (IMP (PARAMS <atomic>+) <stmt>+)
+
+<stmt> := <assign>
+        | <if>
+        | <switch>
+        | <while>
+        | <foreach>
+        | <return>
+
+<assign> := (ASGN <var> <sexpr>)
+
+<if> := (IF <sexpr> <sexpr> <stmt>+)
+
+<switch> := (SWITCH <sexpr> (CASE <atomic> <stmt>+)+)
+
+<while> := (WHILE <sexpr> <stmt>+)
+
+<foreach> := (FOREACH <sexpr> <stmt>+)
+
+<return> := (RETURN <sexpr>)
+

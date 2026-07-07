@@ -14,7 +14,7 @@ Lmbd        : Abs | App | Call | SExpr          // lambda expression
 // Other data structures
 
 Env         : Map<Atom, Lmbd>                   // environment variables
-Statement   : Assign | If | While | Return
+Statement   : Assign | If | Switch | While | ForEach | Return
 Assign      : {
     type: "assign",
     variable: Atom,
