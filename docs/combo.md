@@ -8,7 +8,7 @@ The previous chapters presented three complementary approaches to computation: i
 
 The framework therefore provides a unified programming model in which all three paradigms coexist within a common module system. Functions implemented using different evaluation strategies share the same symbolic expression language and may invoke one another transparently. This integration allows each component of a program to be implemented using the paradigm that best matches its intended behavior while preserving a uniform interface between functions.
 
-This document introduces the module system that organizes programs, describes how functions are defined and imported, and illustrates how imperative, functional, and rewriting bodies cooperate within a single application.
+This chapter introduces the module system that organizes programs, describes how functions are defined and imported, and illustrates how imperative, functional, and rewriting bodies cooperate within a single application.
 
 ---
 
@@ -74,7 +74,7 @@ This separation between interface and implementation is one of the principal des
 
 ## Examples
 
-The examples below illustrate this interaction. The first demonstrates ordinary imperative function calls within a module. The second shows that functions are first-class values by passing an imperative function to a higher-order functional definition. The final example invokes a rewriting function from imperative code, allowing symbolic simplification to be integrated seamlessly into an algorithm. Together these examples demonstrate that the module system provides a unified programming environment in which the three paradigms cooperate through a common expression language and a uniform function interface.
+The examples below illustrate the interaction. The first demonstrates ordinary imperative function calls within a module. The second shows that functions are first-class values by passing an imperative function to a higher-order functional definition. The final example invokes a rewriting function from imperative code, allowing symbolic simplification to be integrated seamlessly into an algorithm. Together these examples demonstrate that the module system provides a unified programming environment in which the three paradigms cooperate through a common expression language and a uniform function interface.
 
 ### Example 1 — Calling an imperative function
 

@@ -8,7 +8,7 @@ The imperative paradigm is the most familiar style of programming for many devel
 
 Within this framework, the imperative paradigm provides a natural way to express algorithms whose logic is inherently procedural. Iterative computations, stateful transformations, and decision-making processes can be described directly using assignments, conditionals, and loops. Rather than introducing a separate expression language, however, imperative programs operate on the common symbolic expressions shared by every component of the framework. This allows imperative code to integrate seamlessly with the functional and rewriting paradigms introduced in the following chapters.
 
-This document presents the syntax and execution model of imperative bodies before illustrating their use through several representative examples.
+This chapter presents the syntax and execution model of imperative bodies before illustrating their use through several representative examples.
 
 ---
 
@@ -28,7 +28,7 @@ The grammar below defines the abstract syntax of imperative bodies. An imperativ
 
 <assign> := (ASGN <var> <sexpr>)
 
-<if> := (IF <sexpr> <sexpr> <stmt>+)
+<if> := (IF <sexpr> (THEN <stmt>+) (ELSE <stmt>+)?)
 
 <switch> := (SWITCH <sexpr> (CASE <atomic> <stmt>+)+)
 
@@ -57,7 +57,7 @@ The simplest statement is assignment:
 
 The expression is evaluated in the current environment, and the resulting value replaces the previous value of the specified variable. Every subsequent statement observes the updated state.
 
-Control flow is expressed using familiar constructs. Conditional execution is performed with `IF`, which evaluates its condition and executes its body only when the condition is true. Multi-way branching is provided by `SWITCH`, whose `CASE` clauses compare a value against a collection of alternatives. The distinguished value `else` serves as the default case when no preceding alternative matches.
+Control flow is expressed using familiar constructs. Conditional execution is performed with `IF`, which evaluates its condition and branches to `THEN` or `ELSE` body when the condition is true or false, respectively. Multi-way branching is provided by `SWITCH`, whose `CASE` clauses compare a value against a collection of alternatives. The distinguished value `ELSE` serves as the default case when no preceding alternative matches.
 
 Iteration is supported by two complementary looping constructs. `WHILE` repeatedly evaluates its condition before each iteration and continues executing its body while the condition remains true. `FOREACH` iterates over every element of a collection, binding the current element to the specified iteration variable during each pass through the loop. Together these constructs cover the two most common styles of iteration: condition-controlled loops and collection traversal.
 
@@ -78,7 +78,7 @@ The examples below introduce the fundamental control structures of the imperativ
     (PARAMS x)
 
     (IF (lt x 0)
-        (ASGN x (mul -1 x)))
+        (THEN (ASGN x (mul -1 x))))
 
     (RETURN x))
 ```
@@ -139,7 +139,7 @@ return sum;
         (CASE "green"
             (RETURN "go"))
 
-        (CASE else
+        (CASE ELSE
             (RETURN "error")))
 )
 ```

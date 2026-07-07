@@ -8,7 +8,7 @@ The functional paradigm approaches programming from a fundamentally different pe
 
 The framework adopts a compact representation based on the lambda calculus, one of the foundational models of computation. Although the internal evaluator employs combinatory logic as an implementation technique, programmers write ordinary lambda expressions using abstractions and applications. Like imperative programs, functional bodies operate on the framework's common symbolic expression language, allowing them to interact naturally with code written in other paradigms.
 
-This document introduces the syntax of lambda expressions, explains their evaluation, and demonstrates the expressive power of functional programming through a series of progressively more sophisticated examples.
+This chapter introduces the syntax of lambda expressions, explains their evaluation, and demonstrates the expressive power of functional programming through a series of progressively more sophisticated examples.
 
 ---
 

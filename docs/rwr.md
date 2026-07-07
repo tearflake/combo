@@ -8,7 +8,7 @@ The rewriting paradigm views computation as a process of symbolic transformation
 
 This declarative style is particularly well suited to domains in which knowledge is naturally expressed as identities, equivalences, or transformation laws. Symbolic algebra, logical reasoning, expression simplification, and formal deduction are all examples of problems that can often be described more naturally by rewrite rules than by explicit algorithms.
 
-Within the framework, rewriting bodies share the same symbolic representation as the imperative and functional paradigms, allowing symbolic transformations to participate seamlessly in larger programs. This document introduces the syntax of rewrite rules, explains the rewriting process, and demonstrates several representative applications of rule-based computation.
+Within the framework, rewriting bodies share the same symbolic representation as the imperative and functional paradigms, allowing symbolic transformations to participate seamlessly in larger programs. This chapter introduces the syntax of rewrite rules, explains the rewriting process, and demonstrates several representative applications of rule-based computation.
 
 ---
 
@@ -90,20 +90,20 @@ Evaluation:
 ```
 ("start"
     ("add" 0
-           ("mul" 1 4)))
+           ("mul" 1 "n")))
 
 ↓
 
 ("add" 0
-       ("mul" 1 4)))
+       ("mul" 1 "n")))
 
 ↓
 
-("add" 0 4)
+("add" 0 "n")
 
 ↓
 
-4
+"n"
 ```
 ---
 
@@ -141,27 +141,24 @@ Evaluation:
 ("start"
     ("not"
            ("and" true
-                  ("or" false true))))
+                  ("or" false "a"))))
 
 ↓
 
 ("not"
        ("and" true
-              ("or" false true)))
+              ("or" false "a")))
 
 ↓
 
 ("not"
        ("and" true
-              true))
+              "a"))
 
 ↓
 
-("not" true)
+("not" "a")
 
-↓
-
-"false"
 ```
 
 ---
