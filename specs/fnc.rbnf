@@ -1,0 +1,10 @@
+<fnc> := (FNC <lmbd>)
+
+<lmbd> := <abs>
+        | <app>
+        | <sexpr>
+
+<abs> := (ABS <atomic>+ <lmbd>)
+
+<app> := (APP <lmbd> <lmbd>+)
+

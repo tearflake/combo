@@ -96,7 +96,7 @@ The examples below illustrate the interaction. The first demonstrates ordinary i
                 (PARAMS x)
 
                 (IF (stdlib/lt x 0)
-                    (ASGN x (stdlib/mul -1 x)))
+                    (THEN (ASGN x (stdlib/mul -1 x))))
 
                 (RETURN x)))
 
@@ -105,7 +105,7 @@ The examples below illustrate the interaction. The first demonstrates ordinary i
                 (PARAMS a b)
 
                 (RETURN
-                    (CALL abs (stdlib/sub a b)))))
+                    (abs (stdlib/sub a b)))))
     )
 )
 ```
