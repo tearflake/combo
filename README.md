@@ -4,11 +4,11 @@
 
 # Combo Framework
 
-This repository represents an intellectual installation, and contains selected work from programming industry. The selected work spans over a closed range of three well known programming paradigms. The paradigms occupy certain important spots between assembly and logical programming.
+This repository represents an intellectual installation, and contains selected work from programming industry. The selected work spans over a closed range of three well known programming paradigms that occupy certain important spots in between assembly and logical programming.
 
-Here, we form a consistent programming whole by providing a simple unifying platform in spite of its multiple paradigmatic nature. The paradigms selected for this installation embrace standard imperative, functional, and rewriting programming, all carefully intertwined using a standard modular code calling system. The platform intentionally does not contain any unnecessary programming features which keeps the implementation simple and small.
+The embracing programming whole provides a simple unifying platform in spite of its multiple paradigmatic nature. The paradigms selected for this installation relate to standard imperative, functional, and rewriting programming, all carefully intertwined using a standard modular code calling system.
 
-We bring a platform tutorial, implementation grammar rules and pseudo code specification, and live online testing playground:
+Here, we can find a platform tutorial, implementation grammar rules and pseudo code specification, and live online testing playground:
 
 * [tutorial](./docs/main.md)
 * [specification](./specs/main.md)
