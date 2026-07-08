@@ -10,7 +10,7 @@ The repository includes a platform tutorial, implementation grammar rules and ps
 
 * [tutorial](./docs/main.md)
 * [specification](./specs/main.md)
-* [playground](./playground/) `// under construction //
+* [playground](./playground/) `// under construction //`
 
 The repository license is very restrictive, and it is centered around exploratory intentions for a sake of studying programming activities.
 
