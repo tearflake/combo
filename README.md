@@ -14,11 +14,7 @@ Here, we can find the platform tutorial, implementation grammar rules and pseudo
 * [specification](./specs/main.md)
 * [playground](./playground/) `// under construction //`
 
-The repository license is very restrictive, and it is centered around exploratory intentions for a sake of studying programming activities.
-
-## License
-
-This license note belongs to the container software installation, and should not be modified or removed from it. The container software installation is not allowed to be downloaded, copied or used by any means other than studying its contents. Authors of the container software are not responsible of any consequences caused by following or violating this license.
+The repository license is very permissive, but it is centered around exploratory intentions for a sake of studying programming activities.
 
 ```
 // under construction //
