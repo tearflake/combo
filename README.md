@@ -14,7 +14,7 @@ Here, we can find the platform tutorial, implementation grammar rules and pseudo
 * [specification](./specs/main.md)
 * [playground](./playground/) `// under construction //`
 
-The repository license is very permissive, but it is centered around exploratory intentions for a sake of studying programming activities.
+The repository license is very permissive, and it is centered around exploratory intentions for a sake of studying programming activities.
 
 ```
 // under construction //
