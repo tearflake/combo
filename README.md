@@ -8,7 +8,7 @@ This repository represents an intellectual installation, and contains selected w
 
 The embracing programming entirety provides a simple unifying platform in spite of its multi-paradigmatic nature. The three paradigms selected for this installation relate to standard imperative, functional, and rewriting programming, all carefully intertwined using a modular code interchange system.
 
-Here, we can find the platform tutorial, implementation grammar rules and pseudo code specification, and live online testing playground:
+Here, we can find the platform tutorial, implementation specification, and live online testing playground:
 
 * [tutorial](./docs/main.md)
 * [specification](./specs/main.md)
