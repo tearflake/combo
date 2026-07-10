@@ -81,7 +81,7 @@ is equivalent to
 
 The remaining form of lambda expression is the symbolic expression (`<sexpr>`). Symbolic expressions represent constants, variables, function calls, and other values supplied by the surrounding framework. Rather than introducing separate syntax for literals and primitive operations, the functional paradigm reuses the common symbolic expression language shared by every component of the framework.
 
-Evaluation follows the semantics of the lambda calculus. Applying a function replaces its formal parameters with the supplied arguments and continues reducing the resulting expression until no further reductions are possible. The framework internally performs this process through a combinatory representation, allowing lambda expressions to be evaluated without explicitly manipulating bound variables during execution. This implementation detail is transparent to the programmer: functional bodies behave as ordinary lambda expressions regardless of the underlying reduction mechanism.
+Evaluation follows the semantics of the lambda calculus. Applying a function replaces its formal parameters with the supplied arguments and continues reducing the resulting expression until no further reductions are possible.
 
 Because functions are ordinary values, they may be passed as arguments, returned as results, or composed to construct larger computations. This ability to treat functions as first-class objects is one of the defining characteristics of the functional paradigm and enables concise descriptions of algorithms that operate on other functions.
 

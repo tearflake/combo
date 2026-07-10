@@ -6,128 +6,152 @@
 
 Atom        : string                                // atoms
 SExpr       : Atom | SExpr[]                            // nested symbolic expressions (list form)
+Call        : {func: Function, args: Lmbd[]}            // predefined function call
 Abs         : {params: Atom[], body: Lmbd}              // abstraction
 App         : {body: Lmbd, args: Lmbd[]}                // application
-Call        : {func: Function, args: Lmbd[]}            // predefined function call
 Lmbd        : Abs | App | Call | SExpr                  // lambda expression
 AbsNorm     : {param: Atom, body: LmbdNorm}             // abstraction
 AppNorm     : {body: LmbdNorm, arg: LmbdNorm}           // application
-LmbdNorm    : AbsNorm | AppNorm | SKI | Call | SExpr    // lambda expression
-SKI         : S | K | I                                 // SKI combinators
+LmbdNorm    : AbsNorm | AppNorm | Call | SExpr          // lambda expression
 
 // Program code
 
-function evaluate(expr: Lmbd, args: Lmbd[]): Lmbd
-    if args.length > 0
-        expr = {body: expr, args: args}
-    
-    return denormalize(skiToLmbd(evalSki(lmbdToSki(normalize(expr)))))
+function evaluate(expr: Lmbd): Lmbd
+    expr = normalize(expr)
+    while true
+        const next = reduce(expr)
+        if equal(next, expr)
+            return denormalize(expr)
+
+        expr = next
+        
+function reduce(expr: LmbdNorm): LmbdNorm
+    if expr is Atom
+        return expr
+
+    else if expr is SExpr
+        return reduceSExpr(expr)
+
+    else if expr is Call
+        return reduceCall(expr)
+
+    else if expr is AbsNorm
+        return reduceAbs(expr)
+
+    else if expr is AppNorm
+        return reduceApp(expr)
+
+function reduceSExpr(expr: SExpr): LmbdNorm
+    for let i = [0..(expr.length - 1)]
+        const child = reduce(expr[i])
+        if !equal(child, expr[i])
+            const newExpr = copy(expr)
+            newExpr[i] = child
+
+            return newExpr
+
+    return expr
+
+function reduceCall(call: Call): LmbdNorm
+    return normalize(evalCall({func: call.func, args: args.map(reduce)})
+
+function reduceAbs(abs: AbsNorm): LmbdNorm
+    const body = reduce(abs.body)
+    if equal(body, abs.body)
+        return abs
+
+    return {param: abs.param, body: body}
+
+function reduceApp(app: AppNorm): LmbdNorm
+    if app.body is AbsNorm
+        return substitute(app.body.body, app.body.param, app.arg)
+
+    const fn = reduce(app.body)
+    if !equal(fn, app.body)
+        return {body: fn, arg: app.arg}
+
+    const arg = reduce(app.arg)
+    if !equal(arg, app.arg)
+        return {body: app.body, arg: arg}
+
+    return app
+
+function substitute(expr: LmbdNorm, variable: string, replacement: LmbdNorm): LmbdNorm
+    if expr is Atom
+        if expr == variable
+            return replacement
+
+        return expr
+
+    if expr is SExpr
+        return expr.map(x => substitute(x, variable, replacement))
+
+    if expr is Call
+        return {func: expr.func, args: expr.args.map(arg => substitute(arg, variable, replacement))}
+
+    if expr is AppNorm
+        return {body: substitute(expr.body, variable, replacement), arg: substitute(expr.arg, variable, replacement)}
+
+    if expr is AbsNorm
+        if expr.param == variable
+            return expr
+
+        if freeVars(replacement).contains(expr.param)
+            const fresh = freshName()
+            const renamed = substitute(expr.body, expr.param, fresh)
+
+            return {param: fresh, body: substitute(renamed, variable, replacement)}
+
+        return {param: expr.param, body: substitute(expr.body, variable, replacement)}
+
+function freeVars(expr: LmbdNorm): string[]
+    if expr is Atom
+        if isVariable(expr)
+            return [expr]
+        
+        return []
+
+    else if expr is SExpr
+        return union(expr.map(freeVars))
+
+    else if expr is Call
+        return union(expr.args.map(freeVars))
+
+    else if expr is AppNorm
+        return union(freeVars(expr.body), freeVars(expr.arg))
+
+    else if expr is AbsNorm
+        const vars = freeVars(expr.body)
+        vars.remove(expr.param)
+
+        return vars
 
 function normalize (expr: Lmbd): LmbdNorm
-    if expr is Atom or expr is Sexpr
-        return expr
-
-    else if expr is Call
+    if expr is Atom
         return expr
     
+    else if expr is Sexpr
+        return expr.map(normalize)
+    
+    else if expr is Call
+        return {func: expr.func, args: expr.args.map(normalize)}
+
     else if expr is Abs
-        if expr.params.length == 0
-            return normalize(expr.body)
-        
-        else
-            return {param: expr.params[0], body: normalize({params: expr.params[1..], body: expr.body})}
+        return {param: expr.params[0], body: normalize({params: expr.params[1..], body: expr.body})}
             
     else if expr is App
-        if expr.args.length == 0
-            return normalize(expr.body)
-        
-        else
-            return {body: normalize({body: expr.body, args: expr.args[0..expr.args.length - 1]}), arg: normalize(expr.args[expr.args.length - 1])}
-
-function lmbdToSki(expr: LmbdNorm): LmbdNorm
-    if expr is Atom or expr is Sexpr
-        return expr
-    
-    else if expr is Call
-        return expr
-    
-    else if expr is AbsNorm
-        body = lmbdToSki(expr.body)
-        if body == expr.param
-            return I
-        
-        else if body is AppNorm
-            return {
-                body: {
-                    body: S,
-                    arg: lmbdToSki({param: expr.param, body: body.body})
-                },
-                arg: lmbdToSki({param: expr.param, body: body.arg})
-            }
-        
-        else
-            return {body: K, arg: body}
-    
-    else if expr is AppNorm
-        return {body: lmbdToSki(expr.body), arg: lmbdToSki(expr.arg)}
-
-function evalSki(expr: LmbdNorm): LmbdNorm
-    if expr is AppNorm
-        left = evalSki(expr.body)
-
-        // I x
-        if left is I
-            return evalSki(expr.arg)
-
-        // K x y
-        else if left is AppNorm && left.body is K
-            return evalSki(left.arg)
-
-        // S f g x
-        else if left is AppNorm && left.body is AppNorm && left.body.body is S
-            return evalSki({
-                body: {
-                    body: left.body.arg,
-                    arg: expr.arg
-                },
-                arg: {
-                    body: left.arg,
-                    arg: expr.arg
-                }
-            })
-
-        else
-            return {
-                body: left,
-                arg: expr.arg
-            }
-
-    else if expr is Call
-        return combo.resolve({func: expr.func, args: [evalSki(a) for a in expr.args]})
-    
-    else
-        return expr
-
-function skiToLmbd(expr: LmbdNorm): LmbdNorm
-    if expr is I
-        return {param: "x", body: "x"}
-    
-    else if expr is K
-        return {param: "x", body: {param: "y", body: "x"}}
-    
-    else if expr is S
-        return {param: "x", body: {param: "y", body: {param: "z", body: {body: {body: "x", arg: "z"}, arg: {body: "y", arg: "z"}}}}}
-    
-    else if expr is AppNorm
-        return {body: skiToLmbd(expr.body), arg: skiToLmbd(expr.arg)}
-
-    else
-        return expr
+        return {body: normalize({body: expr.body, args: expr.args[0..expr.args.length - 1]}), arg: normalize(expr.args[expr.args.length - 1])}
 
 function denormalize(expr: LmbdNorm): Lmbd
     if expr is Atom
         return expr
     
+    else if expr is Sexpr
+        return expr.map(denormalize)
+
+    else if expr is Call
+        return {func: expr.func, args: expr.args.map(denormalize)}
+
     else if expr is AbsNorm
         params = []
         tmpExpr = expr
@@ -136,7 +160,7 @@ function denormalize(expr: LmbdNorm): Lmbd
             tmpExpr = tmpExpr.body
         
         return {params: params, body: denormalize(tmpExpr)}
-            
+        
     else if expr is AppNorm
         tmpExpr = expr
         args = []

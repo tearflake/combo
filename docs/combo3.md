@@ -17,15 +17,18 @@ This chapter introduces the module system that organizes programs, describes how
 The grammar below defines the top-level organization of complete programs. A combined program consists of one or more modules containing function definitions, nested modules, and import declarations. Each function body is implemented using exactly one of the three supported paradigms: imperative, functional, or rewriting.
 
 ```
-<combo> := (COMBO <module>)
+<start> := <module>
 
 <module> := (MODULE <atomic> <unit>+)
 
 <unit> := <module>
+        | <exports>
         | <import>
         | <function>
+        
+<exports> := (EXPORTS <atomic>+)
 
-<import> := (IMPORT <path> <atomic>?)
+<import> := (IMPORT <atomic>? <path>)
 
 <function> := (FUNCTION <atomic> <body>)
 
@@ -40,15 +43,31 @@ The grammar is expressed in the same relaxed Backus–Naur Form (BNF) employed t
 
 ## Informal Semantics
 
-The three programming paradigms presented in the previous chapters are designed to operate together rather than in isolation. A combined program organizes functions into modules, allows modules to import one another, and permits imperative, functional, and rewriting bodies to coexist within the same program. From the perspective of a caller, the implementation paradigm of a function is an implementation detail: every function is invoked using the same call syntax regardless of how it is defined internally.
+The three programming paradigms presented in the previous chapters are designed to operate together rather than in isolation. A complete program is organized into modules, each of which may contain nested modules, imports, exported symbols, and function definitions. Although individual functions may be implemented using different evaluation strategies, they all participate in the same module system and communicate through a uniform calling interface.
 
-The outermost construct of a program is
+The outermost construct of a program is a module:
 
 ```
-(COMBO ...)
+(MODULE name ...)
 ```
 
-which contains one or more modules. A module provides a namespace for related functions and may contain nested modules, imports, and function definitions. Modules serve both as a mechanism for organizing larger programs and as the basis for qualified function names.
+A module establishes a namespace that groups related definitions and provides a unit of organization for larger programs. Modules may be nested to form hierarchical program structures, allowing functionality to be partitioned into logical components.
+
+A module may optionally declare its public interface using
+
+```
+(EXPORTS symbol...)
+```
+
+Only exported symbols are intended to be visible outside the module, while all other definitions remain internal implementation details. Explicit exports clearly separate the public API of a module from its private implementation and support the construction of reusable libraries.
+
+External functionality is made available through import declarations of the form
+
+```
+(IMPORT alias path)
+```
+
+which associate a local module name with another module identified by its path. Imported definitions are subsequently referenced through the specified alias, ensuring that symbols originating from different modules remain unambiguous and avoiding unnecessary name collisions.
 
 Functions are introduced using
 
@@ -56,19 +75,11 @@ Functions are introduced using
 (FUNCTION name body)
 ```
 
-where the body may be an imperative (`IMP`), functional (`FNC`), or rewriting (`RWR`) definition. Since all three paradigms share the same symbolic expression language, functions written in different styles communicate naturally without requiring explicit conversion between representations. A function written in one paradigm may therefore call, receive, or return functions implemented in another.
+where the body is implemented using exactly one of the three supported paradigms: imperative (`IMP`), functional (`FNC`), or rewriting (`RWR`). Since all paradigms share the same symbolic expression language, functions written in different styles communicate naturally without requiring conversion between representations.
 
-External modules are made available through `IMPORT` declarations. Imported modules contribute additional functions that may be referenced either through qualified names, such as
+Function invocation is uniform throughout the framework. Calls appearing inside imperative code, lambda expressions, or rewrite rules are resolved through the module system to the corresponding function definition. Once located, the framework evaluates the function according to the semantics of its body, regardless of the paradigm in which it was implemented. From the caller's perspective, invoking an imperative function is no different from invoking a functional or rewriting function.
 
-```
-stdlib/add
-```
-
-or, depending on the import declaration, through locally visible aliases. This mechanism allows programs to be organized into reusable libraries while avoiding unnecessary name collisions.
-
-Function invocation is performed uniformly throughout the framework. Whether a call appears inside imperative code, a lambda expression, or a rewrite rule, the dispatcher resolves the referenced function, binds its arguments, and evaluates its body according to the semantics of the paradigm in which it was defined. The caller does not need to know whether the callee is imperative, functional, or rewriting; the framework transparently selects the appropriate evaluation strategy.
-
-This separation between interface and implementation is one of the principal design goals of the framework. Imperative functions naturally express stateful algorithms and control flow, functional functions excel at abstraction and higher-order computation, and rewriting functions provide concise descriptions of symbolic transformations. By allowing these paradigms to interoperate within a single module system, the framework encourages each problem to be solved using the style that best matches its nature rather than forcing every computation into a single programming model.
+This separation between interface and implementation is one of the central design principles of the framework. Modules define clear boundaries between components, exports specify the public interface of each module, imports establish dependencies, and function bodies remain free to employ the programming paradigm best suited to the problem they solve. Consequently, imperative algorithms, higher-order functional abstractions, and symbolic rewrite systems can coexist within the same program while sharing a common expression language and a consistent execution model.
 
 ---
 
@@ -79,8 +90,8 @@ The examples below illustrate the interaction. The first demonstrates ordinary i
 ### Example 1 — Calling an imperative function
 
 ```
-(COMBO
-    (MODULE Math
+(COMBO Math
+    (MODULE main
 
         (IMPORT stdlib)
 
@@ -117,8 +128,8 @@ The program returns absolute distance between two sizes.
 ### Example 2 — Functional composition
 
 ```
-(COMBO
-    (MODULE Functional
+(COMBO Functional
+    (MODULE main
 
         (IMPORT stdlib)
 
@@ -158,8 +169,8 @@ Here the functional function `twice` receives the imperative function `square` a
 ### Example 3 — Imperative code using a rewrite system
 
 ```
-(COMBO
-    (MODULE Algebra
+(COMBO Algebra
+    (MODULE main
 
         (FUNCTION main
             (IMP

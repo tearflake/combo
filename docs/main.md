@@ -1,4 +1,4 @@
-# Combo Programming Framework Tutorial
+# Combo3 Programming Framework Introduction
 
 ## Introduction
 
@@ -125,7 +125,7 @@ Readers new to the framework are encouraged to study the documents in the follow
 1. [**Imperative Paradigm**](./imp.md), introducing sequential algorithms and mutable state.
 2. [**Functional Paradigm**](./fnc.md), introducing lambda expressions and higher-order functions.
 3. [**Rewriting Paradigm**](./rwr.md), introducing symbolic transformation through rewrite rules.
-4. [**Combining Paradigms**](./combo.md), demonstrating how the three styles cooperate within a unified module system.
+4. [**Combining Paradigms**](./combo3.md), demonstrating how the three styles cooperate within a unified module system.
 
 Together these documents provide a complete introduction to the framework and its underlying programming model.
 

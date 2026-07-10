@@ -12,7 +12,7 @@ Specification for combo framework includes grammars and pseudocode for embraced 
   [grammar rules](./rwr.rbnf), [pseudocode](./rwr.pseudo)
 
 * combo - an umbrella framework combining the above three programming paradigms:  
-  [grammar rules](./combo.rbnf), [pseudocode](./combo.pseudo)
+  [grammar rules](./combo3.rbnf), [pseudocode](./combo3.pseudo)
 
 Although the pseudocode is short, it defines combo framework to the terse detail due to selected algorithms simplicity.
 

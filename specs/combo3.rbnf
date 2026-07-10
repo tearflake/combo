@@ -1,12 +1,15 @@
-<combo> := (COMBO <module>)
+<start> := <module>
 
 <module> := (MODULE <atomic> <unit>+)
 
 <unit> := <module>
+        | <exports>
         | <import>
         | <function>
+        
+<exports> := (EXPORTS <atomic>+)
 
-<import> := (IMPORT <atomic> <path>)
+<import> := (IMPORT <atomic>? <path>)
 
 <function> := (FUNCTION <atomic> <body>)
 

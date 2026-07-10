@@ -471,8 +471,8 @@ var edit = function (node, options) {
                 document.getElementById(`bmr${rndid}`).style.visibility = "hidden"
             }
         }
-        else if (!options.readOnly && input.value.charAt(input.selectionStart) === "(") {
-            let open = input.selectionStart;
+        else if (!options.readOnly && input.value.charAt(input.selectionStart - 1) === "(") {
+            let open = input.selectionStart - 1;
             let i = open;
             let b = 1;
             while (i < input.value.length && b > 0) {
